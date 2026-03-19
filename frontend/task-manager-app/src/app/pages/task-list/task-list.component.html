@@ -1,0 +1,28 @@
+<div>
+  <h1>Tarefas</h1>
+  <button (click)="newTask()">New Task</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Creaeted at</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td>{{ task.title }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <button (click)="editTask(task.id)">Edit</button>
+          <button (click)="deleteTask(task.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,26 @@
+<div>
+  <h1>{{ isEdit ? 'Edit Task' : 'New Task' }}</h1>
+
+  <form (ngSubmit)="save()">
+
+    <label>Title</label>
+    <input type="text" [(ngModel)]="model.title" name="title" required />
+
+    <label>Description</label>
+    <textarea [(ngModel)]="model.description" name="description"></textarea>
+
+    <label>Priority</label>
+    <select [(ngModel)]="model.priority" name="priority">
+      <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+    </select>
+
+    <label>Status</label>
+    <select [(ngModel)]="model.status" name="status">
+      <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+    </select>
+
+    <button type="submit">Save</button>
+    <button type="button" (click)="cancel()">Cancel</button>
+
+  </form>
+</div>
