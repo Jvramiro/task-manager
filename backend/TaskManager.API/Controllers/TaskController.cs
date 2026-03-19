@@ -54,7 +54,7 @@ public class TaskController : ControllerBase
         await dbContext.Tasks.AddAsync(task);
         await dbContext.SaveChangesAsync();
 
-        return Created($"Task {task.Id} created sucessfully", task);
+        return Created($"Task {task.Id} created successfully", task);
     }
 
     [HttpPut("{id}")]
@@ -92,7 +92,7 @@ public class TaskController : ControllerBase
 
         dbContext.Tasks.Remove(task);
         await dbContext.SaveChangesAsync();
-        return Ok($"Task {id} deleted sucessfully");
+        return Ok($"Task {id} deleted successfully");
     }
 
 }
