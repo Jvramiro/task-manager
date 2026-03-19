@@ -54,7 +54,7 @@ public class TaskController : ControllerBase
         await dbContext.Tasks.AddAsync(task);
         await dbContext.SaveChangesAsync();
 
-        return Created($"Task {task.Id} created successfully", task);
+        return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
     }
 
     [HttpPut("{id}")]

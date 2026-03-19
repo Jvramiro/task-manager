@@ -399,3 +399,6 @@ nodered/context/
 
 # Logs do Node-RED
 nodered/*.log
+
+backend/TaskManager.API/appsettings.json
+backend/TaskManager.API/appsettings.Development.json
