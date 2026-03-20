@@ -1,14 +1,4 @@
-export enum TaskPriority {
-  Low = 'Low',
-  Normal = 'Normal',
-  High = 'High'
-}
-
-export enum TaskStatus {
-  NotStarted = 'NotStarted',
-  InProgress = 'InProgress',
-  Completed = 'Completed'
-}
+import { TaskPriority, TaskStatus } from "../enums/task-enums";
 
 export interface Task {
   id: number;
