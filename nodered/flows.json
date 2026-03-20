@@ -1,0 +1,223 @@
+[
+    {
+        "id": "a0f9b39a9e0bd673",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7b72b901da1ba538",
+        "type": "http in",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "url": "/corretoras",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 420,
+        "wires": [
+            [
+                "82a7f106a90e3c47"
+            ]
+        ]
+    },
+    {
+        "id": "82a7f106a90e3c47",
+        "type": "http request",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://brasilapi.com.br/api/cvm/corretoras/v1",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 320,
+        "y": 420,
+        "wires": [
+            [
+                "402e78939aa50891"
+            ]
+        ]
+    },
+    {
+        "id": "402e78939aa50891",
+        "type": "function",
+        "z": "a0f9b39a9e0bd673",
+        "name": "function 1",
+        "func": "msg.corretoras = msg.payload.map(c => ({\n    name: c.nome_social || c.nome_comercial,\n    city: c.municipio,\n    cnpj: c.cnpj\n}));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 420,
+        "wires": [
+            [
+                "d312fee5f5d0a8ef"
+            ]
+        ]
+    },
+    {
+        "id": "d312fee5f5d0a8ef",
+        "type": "template",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Broker Catalog</title>\n    <style>\n        body { font-family: Arial, sans-serif; padding: 20px; }\n        h1 { margin-bottom: 20px; }\n        ul { list-style: none; padding: 0; }\n        li { padding: 8px 0; border-bottom: 1px solid #eee; }\n    </style>\n</head>\n<body>\n    <h1>Broker Catalog</h1>\n    <ul>\n        {{#corretoras}}\n        <li>{{name}} - {{city}} / {{cnpj}}</li>\n        {{/corretoras}}\n    </ul>\n</body>\n</html>",
+        "output": "str",
+        "x": 620,
+        "y": 420,
+        "wires": [
+            [
+                "60e81439e4549a9d"
+            ]
+        ]
+    },
+    {
+        "id": "60e81439e4549a9d",
+        "type": "http response",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 760,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "b0d6c34ce2747b7d",
+        "type": "http in",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "url": "/cep",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 480,
+        "wires": [
+            [
+                "11cf5e5db07a26bc"
+            ]
+        ]
+    },
+    {
+        "id": "11cf5e5db07a26bc",
+        "type": "template",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>ZIP Code Searcher</title>\n    <style>\n        body { font-family: Arial, sans-serif; padding: 20px; }\n        input { padding: 8px; margin-right: 8px; width: 200px; }\n        button { padding: 8px 16px; }\n        #result { margin-top: 20px; }\n        .field { padding: 6px 0; }\n        .label { font-weight: bold; }\n    </style>\n</head>\n<body>\n    <h1>ZIP Code Searcher</h1>\n    <input type=\"text\" id=\"cep\" placeholder=\"Ex: 01310100\" maxlength=\"8\" />\n    <button onclick=\"search()\">Search</button>\n\n    <div id=\"result\"></div>\n\n    <script>\n        async function search() {\n            const cep = document.getElementById('cep').value.replace(/\\D/g, '');\n            const res = await fetch(`/cep/${cep}`);\n            const data = await res.json();\n\n            if (data.error) {\n                document.getElementById('result').innerHTML = '<p>ZIP code not found.</p>';\n                return;\n            }\n\n            document.getElementById('result').innerHTML = `\n                <div class=\"field\"><span class=\"label\">Street:</span> ${data.street}</div>\n                <div class=\"field\"><span class=\"label\">Neighborhood:</span> ${data.neighborhood}</div>\n                <div class=\"field\"><span class=\"label\">City:</span> ${data.city}</div>\n                <div class=\"field\"><span class=\"label\">State:</span> ${data.state}</div>\n            `;\n        }\n    </script>\n</body>\n</html>",
+        "output": "str",
+        "x": 260,
+        "y": 480,
+        "wires": [
+            [
+                "973c88bf9e93f04c"
+            ]
+        ]
+    },
+    {
+        "id": "973c88bf9e93f04c",
+        "type": "http response",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 400,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "26b42d0d96363622",
+        "type": "http in",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "url": "/cep/:cep",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 540,
+        "wires": [
+            [
+                "568fa894b4d0798c"
+            ]
+        ]
+    },
+    {
+        "id": "568fa894b4d0798c",
+        "type": "http request",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://brasilapi.com.br/api/cep/v1/{{req.params.cep}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 300,
+        "y": 540,
+        "wires": [
+            [
+                "9a14c9781bf98dee"
+            ]
+        ]
+    },
+    {
+        "id": "9a14c9781bf98dee",
+        "type": "function",
+        "z": "a0f9b39a9e0bd673",
+        "name": "function 2",
+        "func": "if (msg.statusCode !== 200) {\n    msg.payload = { error: \"ZIP code not found\" };\n} else {\n    msg.payload = {\n        street: msg.payload.street,\n        neighborhood: msg.payload.neighborhood,\n        city: msg.payload.city,\n        state: msg.payload.state\n    };\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 540,
+        "wires": [
+            [
+                "57a1f51d8a65f24c"
+            ]
+        ]
+    },
+    {
+        "id": "57a1f51d8a65f24c",
+        "type": "http response",
+        "z": "a0f9b39a9e0bd673",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 590,
+        "y": 540,
+        "wires": []
+    }
+]
