@@ -79,7 +79,6 @@ docker-compose up --build
 | Serviço | URL |
 |---|---|
 | Frontend | http://localhost:4200 |
-| Swagger | http://localhost:8080/swagger |
 | API | http://localhost:8080/api/task |
 
 ---
