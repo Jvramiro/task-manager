@@ -78,7 +78,7 @@ public class TaskController : ControllerBase
 
         dbContext.Update(task);
         await dbContext.SaveChangesAsync();
-        return Ok($"Task {task.Id} updated sucessfully");
+        return Ok(task);
     }
 
     [HttpDelete("{id}")]
@@ -92,7 +92,7 @@ public class TaskController : ControllerBase
 
         dbContext.Tasks.Remove(task);
         await dbContext.SaveChangesAsync();
-        return Ok($"Task {id} deleted successfully");
+        return NoContent();
     }
 
 }
