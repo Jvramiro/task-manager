@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.API.Data;
 using TaskManager.API.Repositories;
+using TaskManager.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,5 +46,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.MapControllers();
 app.Run();
