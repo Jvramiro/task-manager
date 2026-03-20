@@ -42,4 +42,20 @@ export class TaskListComponent implements OnInit {
             });
         }
     }
+
+    getPriorityClass(priority: string): string {
+        switch(priority) {
+            case 'Low': return 'badge-priority-low';
+            case 'High': return 'badge-priority-high';
+            default: return 'badge-priority-normal';
+        }
+    }
+
+    getStatusClass(status: string): string {
+        switch(status) {
+            case 'InProgress': return 'badge-status-in-progress';
+            case 'Completed': return 'badge-status-completed';
+            default: return 'badge-status-not-started';
+        }
+    }
 }

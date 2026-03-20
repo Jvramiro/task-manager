@@ -1,27 +1,54 @@
-<div>
-  <h1>{{ isEdit ? 'Edit Task' : 'New Task' }}</h1>
+<div class="page-container form-container">
+  <div class="glass-panel form-panel">
+    <div class="form-header">
+      <h2>{{ isEdit ? 'Edit Task' : 'New Task' }}</h2>
+      <p>{{ isEdit ? 'Update your task details below.' : 'Fill in the details to create a new task.' }}</p>
+    </div>
 
-  <div *ngIf="isEdit && !model.title">Loading...</div>
-  <form (ngSubmit)="save()" *ngIf="!isEdit || model.title">
+    <div class="loading-state" *ngIf="isEdit && isLoading">
+      <div class="spinner"></div>
+      <p>Loading task data...</p>
+    </div>
 
-    <label>Title</label>
-    <input type="text" [(ngModel)]="model.title" name="title" required />
+    <form (ngSubmit)="save()" *ngIf="!isLoading">
+      <div class="form-group">
+        <label class="input-label">Title</label>
+        <input type="text" class="input-field" [(ngModel)]="model.title" name="title" placeholder="e.g. Prepare weekly report" required />
+      </div>
 
-    <label>Description</label>
-    <textarea [(ngModel)]="model.description" name="description"></textarea>
+      <div class="form-group">
+        <label class="input-label">Description</label>
+        <textarea class="input-field textarea-field" [(ngModel)]="model.description" name="description" placeholder="Add important details about this task..."></textarea>
+      </div>
 
-    <label>Priority</label>
-    <select [(ngModel)]="model.priority" name="priority">
-      <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
-    </select>
+      <div class="form-row">
+        <div class="form-group half-width">
+          <label class="input-label">Priority</label>
+          <div class="select-wrapper">
+            <select class="input-field" [(ngModel)]="model.priority" name="priority">
+              <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+            </select>
+          </div>
+        </div>
 
-    <label>Status</label>
-    <select [(ngModel)]="model.status" name="status">
-      <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
-    </select>
+        <div class="form-group half-width">
+          <label class="input-label">Status</label>
+          <div class="select-wrapper">
+            <select class="input-field" [(ngModel)]="model.status" name="status">
+              <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-    <button type="submit">Save</button>
-    <button type="button" (click)="cancel()">Cancel</button>
-
-  </form>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!model.title">
+          <svg *ngIf="!isEdit" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <svg *ngIf="isEdit" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          {{ isEdit ? 'Save Changes' : 'Create Task' }}
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
