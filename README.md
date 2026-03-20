@@ -19,7 +19,6 @@ O projeto utiliza padrões de design para garantir manutenibilidade e testabilid
 
 - **Repository Pattern:** Abstrai a lógica de acesso a dados, permitindo que os controladores não dependam diretamente do DbContext.
 - **Unit of Work:** Gerencia transações de forma centralizada, garantindo que múltiplas operações no banco de dados sejam tratadas como uma única unidade.
-- **Dependency Injection:** Utilizada extensivamente para injetar repositórios e serviços nos controladores.
 
 ---
 
