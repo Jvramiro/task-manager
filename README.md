@@ -7,8 +7,34 @@ Aplicação full stack para gerenciamento de tarefas pessoais, desenvolvida como
 - **Frontend:** Angular 21
 - **Backend:** C# / ASP.NET Core 10 / Entity Framework Core
 - **Banco de dados:** PostgreSQL
+- **Testes:** xUnit / Moq / FluentAssertions
 - **Fluxos:** Node-RED
 - **Containerização:** Docker
+
+---
+
+## Arquitetura e Padrões
+
+O projeto utiliza padrões de design para garantir manutenibilidade e testabilidade:
+
+- **Repository Pattern:** Abstrai a lógica de acesso a dados, permitindo que os controladores não dependam diretamente do DbContext.
+- **Unit of Work:** Gerencia transações de forma centralizada, garantindo que múltiplas operações no banco de dados sejam tratadas como uma única unidade.
+- **Dependency Injection:** Utilizada extensivamente para injetar repositórios e serviços nos controladores.
+
+---
+
+## Padronização de Erros (Middleware)
+
+A API implementa um **Global Exception Middleware** para capturar exceções não tratadas. Todas as respostas de erro seguem o padrão **RFC 7807 (Problem Details for HTTP APIs)**, garantindo um formato JSON consistente:
+
+```json
+{
+  "title": "Internal Server Error",
+  "status": 500,
+  "detail": "Mensagem detalhada do erro (apenas em ambiente de desenvolvimento)",
+  "instance": "/api/task"
+}
+```
 
 ---
 
@@ -17,7 +43,9 @@ Aplicação full stack para gerenciamento de tarefas pessoais, desenvolvida como
 ```
 task-manager/
 ├── frontend/         # Aplicação Angular
-├── backend/          # API ASP.NET Core
+├── backend/          # Solução .NET
+│   ├── TaskManager.API     # API Principal
+│   └── TaskManager.Tests   # Testes Unitários
 ├── nodered/          # Fluxos Node-RED
 ├── database/         # Script SQL da estrutura do banco
 └── docker-compose.yml
@@ -35,6 +63,18 @@ Para rodar manualmente (sem Docker):
 - [Node.js LTS](https://nodejs.org)
 - [Angular CLI](https://angular.io/cli)
 - [Node-RED](https://nodered.org)
+
+---
+
+## Testes Unitários
+
+Para rodar os testes unitários do backend, navegue até a pasta `backend/` e execute o comando através de um terminal:
+
+```cmd
+dotnet test
+```
+
+Os testes cobrem as principais funcionalidades dos controladores e garantem que as regras de negócio e integrações com repositórios funcionem conforme o esperado.
 
 ---
 
