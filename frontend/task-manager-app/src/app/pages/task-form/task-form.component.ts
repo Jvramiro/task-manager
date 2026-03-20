@@ -1,9 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { TaskCreateDTO, TaskPriority, TaskStatus } from "../../models/task.model";
+import { TaskDTO } from "../../models/task.model";
 import { TaskService } from "../../services/task.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { TaskPriority, TaskStatus } from "../../enums/task-enums";
 
 @Component({
     selector: 'app-task-form',
@@ -20,7 +21,7 @@ export class TaskFormComponent implements OnInit {
     priorities = Object.values(TaskPriority);
     statuses = Object.values(TaskStatus);
 
-    model: TaskCreateDTO = {
+    model: TaskDTO = {
         title: '',
         description: '',
         priority: TaskPriority.Normal,

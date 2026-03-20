@@ -9,7 +9,7 @@ export interface Task {
   createdAt: string;
 }
 
-export interface TaskCreateDTO {
+export interface TaskDTO {
   title: string;
   description: string;
   priority: TaskPriority;
