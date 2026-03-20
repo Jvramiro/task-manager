@@ -154,20 +154,10 @@ dotnet run
 ng serve
 ```
 
-**4. Node-RED** — abra um terceiro terminal e rode o comando no terminal:
-
-```cmd
-node-red
-```
-
-Acesse `http://localhost:1880`, clique no menu hamburguer → **Import** e selecione o arquivo `nodered/flows.json`.
-
 | Serviço | URL |
 |---|---|
 | Frontend | http://localhost:4200 |
 | Swagger | https://localhost:{porta}/swagger |
-| Broker Catalog | http://localhost:1880/corretoras |
-| ZIP Code Searcher | http://localhost:1880/cep |
 
 ---
 
@@ -266,6 +256,14 @@ Remove uma tarefa.
 ## Node-RED
 
 Os fluxos são independentes do sistema de tarefas e consomem APIs externas da [BrasilAPI](https://brasilapi.com.br).
+
+Abra um terceiro terminal e rode o comando:
+
+```cmd
+node-red
+```
+
+Acesse `http://localhost:1880`, clique no menu hamburguer → **Import** e selecione o arquivo `nodered/flows.json`.
 
 | Fluxo | URL | Descrição |
 |---|---|---|
