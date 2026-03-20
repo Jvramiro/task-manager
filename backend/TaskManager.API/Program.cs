@@ -1,12 +1,15 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.API.Data;
+using TaskManager.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 builder.Services.AddCors(options =>
 {
