@@ -10,9 +10,12 @@ namespace TaskManager.API.Controllers;
 public class TaskController : ControllerBase
 {
     private readonly ITaskRepository taskRepository;
-    public TaskController(ITaskRepository taskRepository)
+    private readonly IUnitOfWork unitOfWork;
+
+    public TaskController(ITaskRepository taskRepository, IUnitOfWork unitOfWork)
     {
         this.taskRepository = taskRepository;
+        this.unitOfWork = unitOfWork;
     }
 
     [HttpGet]
@@ -51,6 +54,7 @@ public class TaskController : ControllerBase
         };
 
         await taskRepository.CreateAsync(task);
+        await unitOfWork.Commit();
 
         return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
     }
@@ -77,6 +81,7 @@ public class TaskController : ControllerBase
             return NotFound("Task not Found");
         }
 
+        await unitOfWork.Commit();
         return Ok(updatedTask);
     }
 
@@ -89,6 +94,7 @@ public class TaskController : ControllerBase
             return NotFound("Task not Found");
         }
 
+        await unitOfWork.Commit();
         return NoContent();
     }
 }

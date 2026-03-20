@@ -12,6 +12,7 @@ namespace TaskManager.Tests.Controllers;
 public class TaskControllerTests
 {
     private readonly Mock<ITaskRepository> mockRepo;
+    private readonly Mock<IUnitOfWork> mockUnitOfWork;
     private readonly TaskController controller;
     private readonly TaskItem mockTask;
     private readonly List<TaskItem> mockTasks;
@@ -21,7 +22,8 @@ public class TaskControllerTests
     public TaskControllerTests()
     {
         mockRepo = new Mock<ITaskRepository>();
-        controller = new TaskController(mockRepo.Object);
+        mockUnitOfWork = new Mock<IUnitOfWork>();
+        controller = new TaskController(mockRepo.Object, mockUnitOfWork.Object);
 
         mockTask = new TaskItem()
         {
@@ -111,12 +113,14 @@ public class TaskControllerTests
     {
         // Arrange
         mockRepo.Setup(r => r.CreateAsync(It.IsAny<TaskItem>())).ReturnsAsync(mockTask);
+        mockUnitOfWork.Setup(u => u.Commit()).ReturnsAsync(1);
 
         // Act
         var result = await controller.Create(mockTaskCreateDTO);
 
         // Assert
         Assert.IsType<CreatedAtActionResult>(result);
+        mockUnitOfWork.Verify(u => u.Commit(), Times.Once);
     }
 
     [Fact]
@@ -130,6 +134,7 @@ public class TaskControllerTests
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
+        mockUnitOfWork.Verify(u => u.Commit(), Times.Never);
     }
 
     [Fact]
@@ -138,12 +143,14 @@ public class TaskControllerTests
         // Arrange
         var taskId = 1;
         mockRepo.Setup(r => r.UpdateAsync(taskId, It.IsAny<TaskItem>())).ReturnsAsync(mockTask);
+        mockUnitOfWork.Setup(u => u.Commit()).ReturnsAsync(1);
 
         // Act
         var result = await controller.Update(taskId, mockTaskUpdateDTO);
 
         // Assert
         Assert.IsType<OkObjectResult>(result);
+        mockUnitOfWork.Verify(u => u.Commit(), Times.Once);
     }
 
     [Fact]
@@ -158,6 +165,7 @@ public class TaskControllerTests
 
         // Assert
         Assert.IsType<NotFoundObjectResult>(result);
+        mockUnitOfWork.Verify(u => u.Commit(), Times.Never);
     }
 
     [Fact]
@@ -166,12 +174,14 @@ public class TaskControllerTests
         // Arrange
         var taskId = 1;
         mockRepo.Setup(r => r.DeleteAsync(taskId)).ReturnsAsync(true);
+        mockUnitOfWork.Setup(u => u.Commit()).ReturnsAsync(1);
 
         // Act
         var result = await controller.Delete(taskId);
 
         // Assert
         Assert.IsType<NoContentResult>(result);
+        mockUnitOfWork.Verify(u => u.Commit(), Times.Once);
     }
 
     [Fact]
@@ -186,5 +196,6 @@ public class TaskControllerTests
 
         // Assert
         Assert.IsType<NotFoundObjectResult>(result);
+        mockUnitOfWork.Verify(u => u.Commit(), Times.Never);
     }
 }

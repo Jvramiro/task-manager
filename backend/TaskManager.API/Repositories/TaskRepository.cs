@@ -26,7 +26,6 @@ public class TaskRepository : ITaskRepository
     public async Task<TaskItem> CreateAsync(TaskItem task)
     {
         await context.Tasks.AddAsync(task);
-        await context.SaveChangesAsync();
         return task;
     }
 
@@ -41,7 +40,6 @@ public class TaskRepository : ITaskRepository
         existingTask.Status = task.Status;
 
         context.Tasks.Update(existingTask);
-        await context.SaveChangesAsync();
         return existingTask;
     }
 
@@ -51,7 +49,6 @@ public class TaskRepository : ITaskRepository
         if (task == null) return false;
 
         context.Tasks.Remove(task);
-        await context.SaveChangesAsync();
         return true;
     }
 }
