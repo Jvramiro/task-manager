@@ -1,7 +1,8 @@
 <div>
   <h1>{{ isEdit ? 'Edit Task' : 'New Task' }}</h1>
 
-  <form (ngSubmit)="save()">
+  <div *ngIf="isEdit && !model.title">Loading...</div>
+  <form (ngSubmit)="save()" *ngIf="!isEdit || model.title">
 
     <label>Title</label>
     <input type="text" [(ngModel)]="model.title" name="title" required />

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { TaskCreateDTO, TaskPriority, TaskStatus } from "../../models/task.model";
 import { TaskService } from "../../services/task.service";
@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class TaskFormComponent implements OnInit {
     isEdit = false;
     taskId: number | null = null;
+    isLoading = false;
 
     priorities = Object.values(TaskPriority);
     statuses = Object.values(TaskStatus);
@@ -26,13 +27,14 @@ export class TaskFormComponent implements OnInit {
         status: TaskStatus.NotStarted
     };
 
-    constructor(private taskService: TaskService, private router: Router, private route: ActivatedRoute) {}
+    constructor(private taskService: TaskService, private router: Router, private route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
 
     ngOnInit(): void {
         const id = this.route.snapshot.paramMap.get('id');
         if(id) {
             this.isEdit = true;
             this.taskId = +id;
+            this.isLoading = true;
             this.taskService.getById(this.taskId).subscribe(task => {
                 this.model = {
                     title: task.title,
@@ -40,6 +42,8 @@ export class TaskFormComponent implements OnInit {
                     priority: task.priority,
                     status: task.status
                 };
+                this.isLoading = false;
+                this.cdr.detectChanges();
             });
         }
     }
@@ -47,6 +51,12 @@ export class TaskFormComponent implements OnInit {
     save(): void {
         if(this.isEdit && this.taskId) {
             this.taskService.update(this.taskId, this.model).subscribe(() => {
+                this.cdr.detectChanges();
+                this.router.navigate(['/tasks']);
+            });
+        } else {
+            this.taskService.create(this.model).subscribe(() => {
+                this.cdr.detectChanges();
                 this.router.navigate(['/tasks']);
             });
         }

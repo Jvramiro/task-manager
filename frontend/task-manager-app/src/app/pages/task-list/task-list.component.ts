@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { Task } from "../../models/task.model";
 import { TaskService } from "../../services/task.service";
 import { Router } from "@angular/router";
@@ -14,7 +14,7 @@ import { Router } from "@angular/router";
 export class TaskListComponent implements OnInit {
     tasks: Task[] = [];
 
-    constructor(private taskService: TaskService, private router: Router) {}
+    constructor(private taskService: TaskService, private router: Router, private cdr: ChangeDetectorRef) {}
 
     ngOnInit(): void {
         this.loadTasks();
@@ -23,6 +23,7 @@ export class TaskListComponent implements OnInit {
     loadTasks(): void {
         this.taskService.getAll().subscribe(tasks => {
             this.tasks = tasks;
+            this.cdr.detectChanges();
         });
     }
 
