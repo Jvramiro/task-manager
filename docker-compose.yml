@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres
+    container_name: postgres-tasks
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: taskdb
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend/TaskManager.API
+    container_name: taskmanager-backend
+    ports:
+      - "8080:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=taskdb;Username=admin;Password=admin123"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend/task-manager-app
+    container_name: taskmanager-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
